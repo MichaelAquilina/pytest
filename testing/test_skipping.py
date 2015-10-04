@@ -384,6 +384,18 @@ class TestXFailwithSetupTeardown:
 
 
 class TestSkip:
+    def test_fails_on_pytest_skip(self, testdir):
+        testdir.makepyfile("""
+            import pytest
+            @pytest.skip
+            def test_something():
+                pass
+            def test_another():
+                pass
+        """)
+        rec = testdir.inline_run()
+        rec.assertoutcome(failed=1)
+
     def test_skip_class(self, testdir):
         testdir.makepyfile("""
             import pytest

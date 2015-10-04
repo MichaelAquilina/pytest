@@ -464,6 +464,8 @@ def skip(msg=""):
     skipped under certain conditions like mismatching platforms or
     dependencies.  See the pytest_skipping plugin for details.
     """
+    if hasattr(msg, '__call__'):
+        raise ValueError('You are attempting to use pytest.skip as a decorator but this is not correct. Use pytest.mark.skip instead')
     __tracebackhide__ = True
     raise Skipped(msg=msg)
 skip.Exception = Skipped
@@ -504,4 +506,3 @@ def importorskip(modname, minversion=None):
             skip("module %r has __version__ %r, required is: %r" %(
                  modname, verattr, minversion))
     return mod
-
